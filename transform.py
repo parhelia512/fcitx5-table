@@ -66,7 +66,7 @@ def write_file(filename, entries):
         "[Rule]",
         "e2=p11+p12+p21+p22",
         "e3=p11+p21+p31+p32",
-        "e4=p11+p21+p31+n11",
+        "a4=p11+p21+p31+n11",
         "[Data]",
     ]
     for entry in entries:
@@ -99,11 +99,12 @@ def transform_dict_ci(args, output, output_full):
         core_chars = {x.split("\t")[0] for x in core.splitlines()}
     entries = get_entries(os.path.join(args.folder, "tigress.dict.yaml"), core_chars)
     entries.extend(get_entries(os.path.join(args.folder, "tigress_ci.dict.yaml")))
+    entries.extend(get_entries(os.path.join(args.folder, "tigress_simp_ci.dict.yaml")))
 
     entries_full = get_entries(os.path.join(args.folder, "tigress.dict.yaml"))
     entries_full.extend(get_entries(os.path.join(args.folder, "tigress_ci.dict.yaml")))
+    entries_full.extend(get_entries(os.path.join(args.folder, "tigress_simp_ci.dict.yaml")))
 
-    # entries.extend(get_entries(os.path.join(args.folder, 'tigress_simp_ci.dict.yaml')))
     entries.extend(get_entries(os.path.join(args.folder, "tiger.extended.dict.yaml")))
     entries = sorted(entries, key=lambda x: -x.weight)
 
