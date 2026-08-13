@@ -44,9 +44,11 @@ def get_entries(dict: str, filters: Optional[Set[str]] = None) -> List[Entry]:
             try:
                 text = segs[text_idx]
                 code = segs[code_idx]
-                if code.startswith(";"):
-                    continue
-                weight = int(segs[weight_idx])
+                weight = (
+                    int(segs[weight_idx])
+                    if 0 <= weight_idx < len(segs)
+                    else 0
+                )
                 if filters is not None and text not in filters:
                     continue
                 all_entries.append(Entry(text, code, weight))
@@ -61,7 +63,7 @@ def get_entries(dict: str, filters: Optional[Set[str]] = None) -> List[Entry]:
 def write_file(filename, entries):
     dicts = [
         ";fcitx Version 0x03 Table file",
-        "KeyCode=abcdefghijklmnopqrstuvwxyz",
+        "KeyCode=abcdefghijklmnopqrstuvwxyz;",
         "Length=4",
         "[Rule]",
         "e2=p11+p12+p21+p22",
@@ -105,10 +107,10 @@ def transform_dict_ci(args, output, output_full):
     entries_full.extend(get_entries(os.path.join(args.folder, "tigress_ci.dict.yaml")))
     entries_full.extend(get_entries(os.path.join(args.folder, "tigress_simp_ci.dict.yaml")))
 
-    entries.extend(get_entries(os.path.join(args.folder, "tiger.extended.dict.yaml")))
+    entries.extend(get_entries(os.path.join(args.folder, "tigress.extended.dict.yaml")))
     entries = sorted(entries, key=lambda x: -x.weight)
 
-    entries_full.extend(get_entries(os.path.join(args.folder, "tiger.extended.dict.yaml")))
+    entries_full.extend(get_entries(os.path.join(args.folder, "tigress.extended.dict.yaml")))
     entries_full = sorted(entries_full, key=lambda x: -x.weight)
 
     write_file(output, entries)
